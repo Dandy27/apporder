@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pizzaorders2/common/components/pizza_details.dart';
+import 'package:pizzaorders2/common/components/pizza_ingredients.dart';
+import 'package:pizzaorders2/ingredient.dart';
 
 import '../../constants.dart';
 
@@ -21,43 +24,10 @@ class BodyCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
+              // ignore: prefer_const_literals_to_create_immutables
               children: [
-                Expanded( 
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Image.asset(
-                              'assets/images/dish.png',
-                              fit: BoxFit.contain,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Image.asset('assets/images/pizza-1.png'),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      const Text('\$15',
-                          style: TextStyle(
-                            color: Colors.brown,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ))
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.red,
-                  ),
-                ),
+                const PizzaDetail(),
+                const PizzaIngredients(),
               ],
             ),
           ),
