@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:pizzaorders2/ingredient.dart';
 
@@ -24,7 +26,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
     BuildContext context,
   ) {
     return Expanded(
-      flex: 3,
+      flex: 5,
       child: Column(
         children: [
           Expanded(
@@ -39,7 +41,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
                 print('onWillAccept');
                 setState(() {
                   focused = true;
-                  price++;
+                  // price++;
                 });
                 for (final Ingredient? i in listIngredients) {
                   if (i!.compare(ingredient!)) {
@@ -47,6 +49,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
                   }
                 }
                 listIngredients.add(ingredient);
+                price++;
                 return true;
               },
               onLeave: (data) {
@@ -59,7 +62,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
                 return LayoutBuilder(builder: (context, constraints) {
                   return Center(
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 200),
                       height: focused
                           ? constraints.maxHeight
                           : constraints.maxHeight - 20,
@@ -82,7 +85,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
             ),
           ),
           const SizedBox(
-            height: defaultPadding,
+            height: defaultPadding / 3,
           ),
           // builText()
           buidText()
@@ -93,13 +96,26 @@ class _PizzaDetailState extends State<PizzaDetail> {
 
   Widget buidText() {
     return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: Text('\$$price',
-              style: const TextStyle(
-                color: Colors.brown,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              )),
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: animation.drive(Tween<Offset>(
+              begin: const Offset(0.0, 0.0),
+              end: Offset(0.0, animation.value),
+            )),
+            child: child,
+          ),
         );
+      },
+      child: Text('\$$price',
+          key:UniqueKey(),
+          style: const TextStyle(
+            color: Colors.brown,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          )),
+    );
   }
 }
