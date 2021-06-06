@@ -32,7 +32,6 @@ class PizzaIngredients extends StatelessWidget {
                 child: Draggable(
                   feedback: child,
                   data: ingredient,
-                  // childWhenDragging: Container(color: const Color(0xFFF5EED3),),
                   child: child,
                 ),
               );
