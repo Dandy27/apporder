@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pizzaorders2/common/components/pizza_details.dart';
 import 'package:pizzaorders2/common/components/pizza_ingredients.dart';
-import 'package:pizzaorders2/ingredient.dart';
 
 import '../../constants.dart';
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pizzaorders2/ingredient.dart';
 
 import '../../constants.dart';
-// import '../../ingredient.dart';
 
 class PizzaDetail extends StatefulWidget {
   const PizzaDetail({
@@ -23,7 +22,54 @@ class _PizzaDetailState extends State<PizzaDetail>
   int price = 15;
   late AnimationController animationController;
   final notifierFocused = ValueNotifier(false);
-  List<Animation> animationList = <Animation>[];
+  List<Animation<num>> animationList = <Animation<num>>[];
+  late BoxConstraints pizzaConstraints;
+
+  Widget buildIngredientsWidget() {
+    final List<Widget> elements = [];
+    if (animationList.isNotEmpty) {
+      for (int i = 0; i < listIngredients.length; i++) {
+        Ingredient? ingredient = listIngredients[i];
+        for (int j = 0; j < ingredient!.positions.length; j++) {
+          final animation = animationList[j];
+          final position = ingredient.positions[j];
+          final positionX = position.dx;
+          final positionY = position.dy;
+          double fromX = 0.0, fromY = 0.0;
+          if (j < 1) {
+            fromX = -pizzaConstraints.maxWidth * (1 - animation.value);
+          } else if (j < 2) {
+            fromX = pizzaConstraints.maxWidth * (1 - animation.value);
+          } else if (j < 4) {
+            fromY = -pizzaConstraints.maxHeight * (1 - animation.value);
+          } else {
+            fromY = pizzaConstraints.maxHeight * (1 - animation.value);
+          }
+
+          elements.add(Transform(
+            transform: Matrix4.identity()
+              ..translate(
+                fromX + pizzaConstraints.maxWidth * positionX,
+                fromY + pizzaConstraints.maxHeight * positionY,
+              ),
+            child: Image.asset(
+              ingredient.image,
+              height: 40,
+            ),
+          ));
+
+          return Stack(
+            children: elements,
+          );
+
+          
+        }
+       
+      }
+       
+    }
+    return SizedBox.fromSize();
+  }
 
   void buildIngredientsAnimation() {
     animationList.clear();
@@ -37,7 +83,7 @@ class _PizzaDetailState extends State<PizzaDetail>
     animationList.clear();
     animationList.add(CurvedAnimation(
         parent: animationController,
-        curve: const Interval(0.4,1.0, curve: Curves.decelerate)));
+        curve: const Interval(0.4, 1.0, curve: Curves.decelerate)));
     animationList.clear();
     animationList.add(CurvedAnimation(
         parent: animationController,
@@ -67,70 +113,81 @@ class _PizzaDetailState extends State<PizzaDetail>
   Widget build(
     BuildContext context,
   ) {
-    return Column(
+    return Stack(
       children: [
-        Expanded(
-          child: DragTarget<Ingredient>(
-            onAccept: (ingredient) {
-              print('onAccept');
-              notifierFocused.value = false;
-              setState(() {
-                listIngredients.add(ingredient);
-                price++;
-              });
-            },
-            onWillAccept: (ingredient) {
-              print('onWillAccept');
-              notifierFocused.value = true;
+        Column(
+          children: [
+            Expanded(
+              child: DragTarget<Ingredient>(
+                onAccept: (ingredient) {
+                  print('onAccept');
+                  notifierFocused.value = false;
+                  setState(() {
+                    listIngredients.add(ingredient);
+                    price++;
+                    buildIngredientsAnimation();
+                    animationController.forward(from: 0.0);
+                  });
+                },
+                onWillAccept: (ingredient) {
+                  print('onWillAccept');
+                  notifierFocused.value = true;
 
-              for (Ingredient? i in listIngredients) {
-                if (i!.compare(ingredient!)) {
-                  return false;
-                }
-              }
+                  for (Ingredient? i in listIngredients) {
+                    if (i!.compare(ingredient!)) {
+                      return false;
+                    }
+                  }
 
-              return true;
-            },
-            onLeave: (data) {
-              print('onLeave');
-              notifierFocused.value = false;
-            },
-            builder: (context, list, reject) {
-              return LayoutBuilder(builder: (context, constraints) {
-                return Center(
-                  child: ValueListenableBuilder<bool>(
-                      valueListenable: notifierFocused,
-                      builder: (context, focused, _) {
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          height: focused
-                              ? constraints.maxHeight
-                              : constraints.maxHeight - 10,
-                          child: Stack(
-                            children: [
-                              Image.asset(
-                                'assets/images/dish.png',
-                                fit: BoxFit.contain,
+                  return true;
+                },
+                onLeave: (data) {
+                  print('onLeave');
+                  notifierFocused.value = false;
+                },
+                builder: (context, list, reject) {
+                  return LayoutBuilder(builder: (context, constraints) {
+                    pizzaConstraints = constraints;
+                    return Center(
+                      child: ValueListenableBuilder<bool>(
+                          valueListenable: notifierFocused,
+                          builder: (context, focused, _) {
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              height: focused
+                                  ? constraints.maxHeight
+                                  : constraints.maxHeight - 10,
+                              child: Stack(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/dish.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Image.asset(
+                                        'assets/images/pizza-1.png'),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child:
-                                    Image.asset('assets/images/pizza-1.png'),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                );
-              });
-            },
-          ),
+                            );
+                          }),
+                    );
+                  });
+                },
+              ),
+            ),
+            const SizedBox(
+              height: defaultPadding / 3,
+            ),
+            // builText()
+            buidText()
+          ],
         ),
-        const SizedBox(
-          height: defaultPadding / 3,
-        ),
-        // builText()
-        buidText()
+        AnimatedBuilder(animation: animationController, builder: (context, _){
+        return buildIngredientsWidget();
+          
+        })
       ],
     );
   }
