@@ -29,7 +29,7 @@ class _PizzaDetailState extends State<PizzaDetail>
     final List<Widget> elements = [];
     if (animationList.isNotEmpty) {
       for (int i = 0; i < listIngredients.length; i++) {
-        Ingredient? ingredient = listIngredients[i];
+        final Ingredient? ingredient = listIngredients[i];
         for (int j = 0; j < ingredient!.positions.length; j++) {
           final animation = animationList[j];
           final position = ingredient.positions[j];
@@ -57,16 +57,14 @@ class _PizzaDetailState extends State<PizzaDetail>
               height: 40,
             ),
           ));
-
-          return Stack(
-            children: elements,
-          );
-
           
         }
        
+        
       }
-       
+       return Stack(
+            children: elements,
+          );
     }
     return SizedBox.fromSize();
   }
@@ -98,7 +96,7 @@ class _PizzaDetailState extends State<PizzaDetail>
   void initState() {
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(microseconds: 900),
+      duration: const Duration(milliseconds: 900),
     );
     super.initState();
   }
@@ -184,10 +182,11 @@ class _PizzaDetailState extends State<PizzaDetail>
             buidText()
           ],
         ),
-        AnimatedBuilder(animation: animationController, builder: (context, _){
-        return buildIngredientsWidget();
-          
-        })
+        AnimatedBuilder(
+            animation: animationController,
+            builder: (context, _) {
+              return buildIngredientsWidget();
+            })
       ],
     );
   }
