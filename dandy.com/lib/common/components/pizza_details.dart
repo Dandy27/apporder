@@ -67,74 +67,71 @@ class _PizzaDetailState extends State<PizzaDetail>
   Widget build(
     BuildContext context,
   ) {
-    return Expanded(
-      flex: 5,
-      child: Column(
-        children: [
-          Expanded(
-            child: DragTarget<Ingredient>(
-              onAccept: (ingredient) {
-                print('onAccept');
-                notifierFocused.value = false;
-                setState(() {
-                  listIngredients.add(ingredient);
-                  price++;
-                });
-              },
-              onWillAccept: (ingredient) {
-                print('onWillAccept');
-                notifierFocused.value = true;
+    return Column(
+      children: [
+        Expanded(
+          child: DragTarget<Ingredient>(
+            onAccept: (ingredient) {
+              print('onAccept');
+              notifierFocused.value = false;
+              setState(() {
+                listIngredients.add(ingredient);
+                price++;
+              });
+            },
+            onWillAccept: (ingredient) {
+              print('onWillAccept');
+              notifierFocused.value = true;
 
-                for (Ingredient? i in listIngredients) {
-                  if (i!.compare(ingredient!)) {
-                    return false;
-                  }
+              for (Ingredient? i in listIngredients) {
+                if (i!.compare(ingredient!)) {
+                  return false;
                 }
+              }
 
-                return true;
-              },
-              onLeave: (data) {
-                print('onLeave');
-                notifierFocused.value = false;
-              },
-              builder: (context, list, reject) {
-                return LayoutBuilder(builder: (context, constraints) {
-                  return Center(
-                    child: ValueListenableBuilder<bool>(
-                        valueListenable: notifierFocused,
-                        builder: (context, focused, _) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            height: focused
-                                ? constraints.maxHeight
-                                : constraints.maxHeight - 10,
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  'assets/images/dish.png',
-                                  fit: BoxFit.contain,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child:
-                                      Image.asset('assets/images/pizza-1.png'),
-                                )
-                              ],
-                            ),
-                          );
-                        }),
-                  );
-                });
-              },
-            ),
+              return true;
+            },
+            onLeave: (data) {
+              print('onLeave');
+              notifierFocused.value = false;
+            },
+            builder: (context, list, reject) {
+              return LayoutBuilder(builder: (context, constraints) {
+                return Center(
+                  child: ValueListenableBuilder<bool>(
+                      valueListenable: notifierFocused,
+                      builder: (context, focused, _) {
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          height: focused
+                              ? constraints.maxHeight
+                              : constraints.maxHeight - 10,
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                'assets/images/dish.png',
+                                fit: BoxFit.contain,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child:
+                                    Image.asset('assets/images/pizza-1.png'),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                );
+              });
+            },
           ),
-          const SizedBox(
-            height: defaultPadding / 3,
-          ),
-          // builText()
-          buidText()
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: defaultPadding / 3,
+        ),
+        // builText()
+        buidText()
+      ],
     );
   }
 
