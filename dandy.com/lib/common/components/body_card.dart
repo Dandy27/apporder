@@ -27,7 +27,8 @@ class BodyCard extends StatelessWidget {
             child: Column(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                const Expanded(flex: 5, child: PizzaDetail()),
+                const SizedBox(height: defaultPadding,),
+                const Expanded(flex: 3, child: PizzaDetail()),
                 const Expanded(flex: 3, child: PizzaIngredients()),
               ],
             ),
