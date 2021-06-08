@@ -17,19 +17,19 @@ class PizzaDetail extends StatefulWidget {
 class _PizzaDetailState extends State<PizzaDetail>
     with SingleTickerProviderStateMixin {
   late final Ingredient ingredient;
-  List<Ingredient?> listIngredients = <Ingredient>[];
+  List<Ingredient?> _listIngredients = <Ingredient>[];
   // bool focused = false;
   int price = 15;
   late AnimationController animationController;
   final notifierFocused = ValueNotifier(false);
   List<Animation<num>> animationList = <Animation<num>>[];
-  late BoxConstraints pizzaConstraints;
+  late BoxConstraints _pizzaConstraints;
 
   Widget buildIngredientsWidget() {
     final List<Widget> elements = [];
     if (animationList.isNotEmpty) {
-      for (int i = 0; i < listIngredients.length; i++) {
-        final Ingredient? ingredient = listIngredients[i];
+      for (int i = 0; i < _listIngredients.length; i++) {
+        final Ingredient? ingredient = _listIngredients[i];
         for (int j = 0; j < ingredient!.positions.length; j++) {
           final animation = animationList[j];
           final position = ingredient.positions[j];
@@ -37,39 +37,36 @@ class _PizzaDetailState extends State<PizzaDetail>
           final positionY = position.dy;
           double fromX = 0.0, fromY = 0.0;
           if (j < 1) {
-            fromX = -pizzaConstraints.maxWidth * (1 - animation.value);
+            fromX = -_pizzaConstraints.maxWidth * (1 - animation.value);
           } else if (j < 2) {
-            fromX = pizzaConstraints.maxWidth * (1 - animation.value);
+            fromX = _pizzaConstraints.maxWidth * (1 - animation.value);
           } else if (j < 4) {
-            fromY = -pizzaConstraints.maxHeight * (1 - animation.value);
+            fromY = -_pizzaConstraints.maxHeight * (1 - animation.value);
           } else {
-            fromY = pizzaConstraints.maxHeight * (1 - animation.value);
+            fromY = _pizzaConstraints.maxHeight * (1 - animation.value);
           }
 
-          elements.add(Transform(
-            transform: Matrix4.identity()
-              ..translate(
-                fromX + pizzaConstraints.maxWidth * positionX,
-                fromY + pizzaConstraints.maxHeight * positionY,
+          elements.add(
+            Transform(
+              transform: Matrix4.identity()
+                ..translate(
+                  fromX + _pizzaConstraints.maxWidth * positionX,
+                  fromY + _pizzaConstraints.maxHeight * positionY,
+                ),
+              child: Image.asset(
+                ingredient.image,
+                height: 40,
               ),
-            child: Image.asset(
-              ingredient.image,
-              height: 40,
             ),
-          ));
+          );
           
         }
-       
-        
       }
-       return Stack(
-            children: elements,
-          );
     }
     return SizedBox.fromSize();
   }
 
-  void buildIngredientsAnimation() {
+  void _buildIngredientsAnimation() {
     animationList.clear();
     animationList.add(CurvedAnimation(
         parent: animationController,
@@ -96,8 +93,9 @@ class _PizzaDetailState extends State<PizzaDetail>
   void initState() {
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 300),
     );
+    animationController.addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -121,9 +119,9 @@ class _PizzaDetailState extends State<PizzaDetail>
                   print('onAccept');
                   notifierFocused.value = false;
                   setState(() {
-                    listIngredients.add(ingredient);
+                    _listIngredients.add(ingredient);
                     price++;
-                    buildIngredientsAnimation();
+                    _buildIngredientsAnimation();
                     animationController.forward(from: 0.0);
                   });
                 },
@@ -131,7 +129,7 @@ class _PizzaDetailState extends State<PizzaDetail>
                   print('onWillAccept');
                   notifierFocused.value = true;
 
-                  for (Ingredient? i in listIngredients) {
+                  for (Ingredient? i in _listIngredients) {
                     if (i!.compare(ingredient!)) {
                       return false;
                     }
@@ -145,7 +143,7 @@ class _PizzaDetailState extends State<PizzaDetail>
                 },
                 builder: (context, list, reject) {
                   return LayoutBuilder(builder: (context, constraints) {
-                    pizzaConstraints = constraints;
+                    _pizzaConstraints = constraints;
                     return Center(
                       child: ValueListenableBuilder<bool>(
                           valueListenable: notifierFocused,
@@ -158,13 +156,13 @@ class _PizzaDetailState extends State<PizzaDetail>
                               child: Stack(
                                 children: [
                                   Image.asset(
-                                    'assets/images/dish.png',
+                                    'assets/images/wooden_plate2.png',
                                     fit: BoxFit.contain,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),
-                                    child: Image.asset(
-                                        'assets/images/pizza-1.png'),
+                                    child:
+                                        Image.asset('assets/images/pizza1.png'),
                                   )
                                 ],
                               ),

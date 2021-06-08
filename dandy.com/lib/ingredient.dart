@@ -13,7 +13,7 @@ class Ingredient {
 
 final ingredients = <Ingredient?>[
   Ingredient(
-    'assets/images/chili.png',
+    'assets/images/toppings/green_chillies_thumb.png',
     <Offset>[
       const Offset(0.2, 0.2),
       const Offset(0.6, 0.2),
@@ -23,7 +23,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/olive.png',
+    'assets/images/toppings/olives_thumb.png',
     <Offset>[
       const Offset(0.25, 0.35),
       const Offset(0.65, 0.35),
@@ -33,7 +33,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/onion.png',
+    'assets/images/toppings/onions_thumb.png',
     <Offset>[
       const Offset(0.2, 0.5),
       const Offset(0.65, 0.6),
@@ -43,7 +43,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/chili_unit.png',
+    'assets/images/toppings/green_peppers_thumb.png',
     <Offset>[
       const Offset(0.2, 0.2),
       const Offset(0.6, 0.2),
@@ -53,7 +53,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/pea.png',
+    'assets/images/toppings/halloumi_thumb.png',
     <Offset>[
       const Offset(0.2, 0.35),
       const Offset(0.65, 0.35),
@@ -63,7 +63,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/pickle.png',
+    'assets/images/toppings/tomatos_thumb.png',
     <Offset>[
       const Offset(0.2, 0.65),
       const Offset(0.65, 0.3),
@@ -73,7 +73,7 @@ final ingredients = <Ingredient?>[
     ],
   ),
   Ingredient(
-    'assets/images/mushroom_unit.png',
+    'assets/images/toppings/mushrooms_thumb.png',
     <Offset>[
       const Offset(0.2, 0.2),
       const Offset(0.6, 0.2),
